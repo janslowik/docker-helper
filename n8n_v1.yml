@@ -1,0 +1,23 @@
+services:
+  kurs_n8n:
+    image: n8nio/n8n:1.98.1
+    container_name: kurs_n8n
+    restart: unless-stopped
+    ports:
+      - "5678:5678"
+    volumes:
+      - <FOLDER_KURSU>/pliki_n8n:/pliki_n8n
+      - <FOLDER_KURSU>/n8n_data:/home/node/.n8n
+    environment:
+      - GENERIC_TIMEZONE=Europe/Warsaw
+      - TZ=Europe/Warsaw
+      
+  ngrok:
+    image: ngrok/ngrok:latest
+    container_name: ngrok
+    restart: unless-stopped
+    ports:
+      - "4040:4040"
+    environment:
+      - NGROK_AUTHTOKEN=<NGROK_AUTHTOKEN>
+    command: http host.docker.internal:5678 --domain=<NGROK_DOMAIN>
